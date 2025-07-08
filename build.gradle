@@ -1,5 +1,7 @@
 plugins {
+    id 'application'
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group = 'org.example'
@@ -10,10 +12,30 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.openjfx:javafx-controls:21'
+    implementation 'org.openjfx:javafx-fxml:21'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
+application {
+    mainClass = 'org.example.Main' // Замени на путь к твоему классу, если отличается
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    platform = 'win' // Замени на 'mac' или 'linux', если нужно
+}
+
 test {
     useJUnitPlatform()
+}
+run {
+    jvmArgs = [
+            '--module-path', 'C:/javafx-sdk-21/lib',
+            '--add-modules', 'javafx.controls,javafx.fxml'
+    ]
 }
