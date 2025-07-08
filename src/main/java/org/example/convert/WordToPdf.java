@@ -8,11 +8,18 @@ public class WordToPdf {
     public static final int wdFormatPDF = 17;
 
     public static void main(String[] args) {
-        System.setProperty("jacob.dll.path", "libs/jacob-1.14.3-x64.dll");
+        String dllPath = new java.io.File("src/jacob-1.14.3-x64.dll").getAbsolutePath();
+        System.setProperty("jacob.dll.path", dllPath);
         com.jacob.com.LibraryLoader.loadJacobLibrary();
+
         WordToPdf wordToPdf = new WordToPdf();
-        wordToPdf.convert("C:\\Users\\REST\\Downloads\\Оценка_качества_бинарной_классификации.docx", "C:\\Users\\REST\\Downloads", "converted.pdf");
+        wordToPdf.convert(
+                "C:\\Users\\REST\\Downloads\\Оценка_качества_бинарной_классификации.docx",
+                "C:\\Users\\REST\\Downloads\\",
+                "converted.pdf"
+        );
     }
+
     public void convert(String inputPath, String outputPath, String filename) {
         ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
         try {
