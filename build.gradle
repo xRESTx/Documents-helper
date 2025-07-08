@@ -12,8 +12,13 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-}
 
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
+    implementation 'org.apache.commons:commons-compress:1.21'
+
+}
 test {
     useJUnitPlatform()
 }
