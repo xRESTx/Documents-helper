@@ -11,8 +11,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javafx.geometry.Insets;
+import org.example.logic.WordTemplateProcessor;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StartUI {
 
@@ -54,7 +59,25 @@ public class StartUI {
                     alert.showAndWait();
                     return;
                 }
-                System.out.println("Сохраняем шаблон...");
+
+                Map<String, String> values = new HashMap<>();
+                values.put("date", dateField.getText());
+                values.put("invoice", invoiceField.getText());
+                values.put("hours", hoursField.getText());
+                values.put("quantity", quantityField.getText());
+                values.put("total", totalField.getText());
+
+                try{
+                    WordTemplateProcessor.generateDocument("template_ru.docx", values, "output_ru.docx");
+                    WordTemplateProcessor.generateDocument("template_en.docx", values, "output_en.docx");
+                    Alert success = new Alert(Alert.AlertType.INFORMATION, "Документы успешно созданы!");
+                    success.showAndWait();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    Alert error = new Alert(Alert.AlertType.ERROR, "Ошибка при создании документов");
+                    error.showAndWait();
+                }
+
             });
 
             VBox inputBox = new VBox(8, dateField, invoiceField, hoursField, quantityField, totalField, saveBtn);
