@@ -17,7 +17,7 @@ public class WordTemplateProcessor {
 
         XWPFDocument doc = new XWPFDocument(templateStream);
 
-        // Заменяем плейсхолдеры в параграфах
+        // Заменяем в параграфах
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
             replaceInParagraph(paragraph, values, false);
         }
@@ -68,8 +68,4 @@ public class WordTemplateProcessor {
             run.setText(fullText);
         }
     }
-
-
-
-
 }

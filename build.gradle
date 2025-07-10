@@ -25,13 +25,13 @@ dependencies {
 }
 
 application {
-    mainClass = 'org.example.Main' // Замени на путь к твоему классу, если отличается
+    mainClass = 'org.example.Main' // Путь классу, если отличается
 }
 
 javafx {
     version = "21"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
-    platform = 'win' // Замени на 'mac' или 'linux', если нужно
+    platform = 'win'
 }
 
 test {
