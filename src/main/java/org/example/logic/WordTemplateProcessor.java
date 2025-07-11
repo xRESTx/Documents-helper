@@ -10,6 +10,15 @@ import java.util.Map;
 
 public class WordTemplateProcessor {
 
+    /**
+     * Обрабатывает шаблон Word (.docx), подставляя значения из карты по плейсхолдерам.
+     * Например, "{{date}}" будет заменено на значение, переданное в коллекции.
+     * Поддерживает замену как в абзацах, так и внутри таблиц документа.
+     * @param templateName имя шаблона (.docx-файла), находящегося в resources/templates
+     * @param values коллекция значений, где ключи соответствуют плейсхолдерам (без фигурных скобок)
+     * @param outputPath путь, по которому будет сохранён сгенерированный документ
+     * @throws IOException если шаблон не найден или произошла ошибка записи
+     */
     public static void generateDocument(String templateName, Map<String, String> values, String outputPath) throws IOException {
         InputStream templateStream = WordTemplateProcessor.class.getClassLoader()
                 .getResourceAsStream("templates/" + templateName);
@@ -39,6 +48,15 @@ public class WordTemplateProcessor {
         }
         doc.close();
     }
+
+    /**
+     * Выполняет замену плейсхолдеров внутри одного абзаца.
+     * Если найдены плейсхолдеры, текст абзаца перезаписывается единым run.
+     *
+     * @param paragraph   абзац, в котором осуществляется поиск и замена
+     * @param values      коллекция плейсхолдеров и их значений
+     * @param fromTable   флаг, указывающий, находится ли абзац внутри таблицы (для отладки)
+     */
     private static void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> values, boolean fromTable) {
         String fullText = paragraph.getText();
         if (fullText == null || fullText.isEmpty()) return;
@@ -57,7 +75,9 @@ public class WordTemplateProcessor {
             }
         }
 
-
+// Удаляем все runs в абзаце, чтобы очистить плейсхолдер полностью.
+// Каждый run — это фрагмент текста с уникальным стилем (например, жирный, курсив).
+// Удаляем в обратном порядке, чтобы избежать смещения индексов.
         if (hasPlaceholder) {
             // Удаляем все runs безопасно
             int runCount = paragraph.getRuns().size();

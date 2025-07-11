@@ -37,6 +37,10 @@ public class StartUI {
     }
 
     //Задача 1 - Заполнение шаблона(Сделано)
+    /**
+     * Окно для работы с шаблоном, заполнения полей и подставление значений в файлы с сохранением
+     * @return
+     */
     private Tab createTemplateTab() {
         Tab tab = new Tab("Шаблон");
         tab.setClosable(false);
@@ -51,7 +55,7 @@ public class StartUI {
         hoursField.setPromptText("Введите количество часов");
 
         TextField quantityField = new TextField();
-        quantityField.setPromptText("Введите количество");
+        quantityField.setPromptText("Введите количество услуг");
 
         TextField totalField = new TextField();
         totalField.setPromptText("Введите итоговую сумму");
@@ -93,6 +97,10 @@ public class StartUI {
     }
 
     //Задача 2 - Из Word в Pdf
+    /**
+     * Выбор файла docx для преобразования в pdf
+     * @return
+     */
     private Tab createPdfTab() {
         Tab tab = new Tab("Из Word в PDF");
         tab.setClosable(false);
@@ -159,6 +167,10 @@ public class StartUI {
     }
 
     // Задача 3 - Из Excel в Pdf
+    /**
+     * Выбор нескольких excel файлов для преобразования в pdf
+     * @return
+     */
     private Tab createTranslateTab() {
         Tab tab = new Tab("Переводы");
         tab.setClosable(false);
@@ -171,6 +183,10 @@ public class StartUI {
     }
 
     // Задача 4 - Переводы(ничего нет)
+    /**
+     * Выбор файла excel для перевода содержимого
+     * @return
+     */
     private Tab createExcelTab() {
         Tab tab = new Tab("Загрузка Excel");
         tab.setClosable(false);
