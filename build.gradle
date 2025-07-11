@@ -21,7 +21,7 @@ dependencies {
 
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
     implementation 'org.apache.pdfbox:pdfbox:2.0.29'
-
+    implementation("net.sf.jacob-project:jacob:1.14.3")
 }
 
 application {
