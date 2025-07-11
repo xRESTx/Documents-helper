@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javafx.geometry.Insets;
+import org.example.convert.WordToPdf;
 import org.example.logic.WordTemplateProcessor;
 
 import java.io.File;
@@ -77,8 +78,21 @@ public class StartUI {
             values.put("total", totalField.getText());
 
             try {
-                WordTemplateProcessor.generateDocument("template_ru.docx", values, "output_ru.docx");
-                WordTemplateProcessor.generateDocument("template_en.docx", values, "output_en.docx");
+                WordTemplateProcessor.generateDocument("template_ru.docx", values, "src/main/resources/output/output_ru.docx");
+                WordTemplateProcessor.generateDocument("template_en.docx", values, "src/main/resources/output/output_en.docx");
+
+                WordToPdf wordToPdf = new WordToPdf();
+                String AbsolutePath = new java.io.File("src/main/resources/output").getAbsolutePath();
+//                System.out.println(AbsolutePath);
+                wordToPdf.convert(
+                        AbsolutePath + "/output_ru.docx",
+                        AbsolutePath,  "/output_ru.pdf"
+                );
+                wordToPdf.convert(
+                        AbsolutePath + "/output_en.docx",
+                        AbsolutePath,  "/output_en.pdf"
+                );
+
                 showAlert(Alert.AlertType.INFORMATION, "Документы успешно созданы!");
             } catch (IOException ex) {
                 ex.printStackTrace();

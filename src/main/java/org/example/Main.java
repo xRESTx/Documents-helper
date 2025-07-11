@@ -9,6 +9,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         StartUI startUI = new StartUI();
         startUI.launchUI(primaryStage);
+        String dllPath = new java.io.File("src/jacob-1.14.3-x64.dll").getAbsolutePath();
+        System.setProperty("jacob.dll.path", dllPath);
+        com.jacob.com.LibraryLoader.loadJacobLibrary();
     }
 
     public static void main(String[] args) {

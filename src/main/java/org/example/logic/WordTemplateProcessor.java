@@ -1,6 +1,7 @@
 package org.example.logic;
 
 import org.apache.poi.xwpf.usermodel.*;
+import org.example.convert.WordToPdf;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

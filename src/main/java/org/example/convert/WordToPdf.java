@@ -20,24 +20,60 @@ public class WordToPdf {
         );
     }
 
+//    public void convert(String inputPath, String outputPath, String filename) {
+//        ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
+//        try {
+//            wordApp.setProperty("Visible", new Variant(false));
+//            Dispatch documents = wordApp.getProperty("Documents").toDispatch();
+//
+//            String input = inputPath; //"C:\\path\\to\\your\\file.doc"
+//            String output = outputPath + filename; //"C:\\path\\to\\your\\file.pdf";
+//
+//            Dispatch document = Dispatch.call(documents, "Open", input, false, true).toDispatch();
+//            Dispatch.call(document, "SaveAs", output, wdFormatPDF);
+//            Dispatch.call(document, "Close", false);
+//
+//            System.out.println("Conversion completed: " + output);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            wordApp.invoke("Quit", 0);
+//        }
+//    }
+
     public void convert(String inputPath, String outputPath, String filename) {
         ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
+        Dispatch document = null;
+
         try {
             wordApp.setProperty("Visible", new Variant(false));
             Dispatch documents = wordApp.getProperty("Documents").toDispatch();
 
-            String input = inputPath; //"C:\\path\\to\\your\\file.doc"
-            String output = outputPath + filename; //"C:\\path\\to\\your\\file.pdf";
+            String outputFile = outputPath + filename;
 
-            Dispatch document = Dispatch.call(documents, "Open", input, false, true).toDispatch();
-            Dispatch.call(document, "SaveAs", output, wdFormatPDF);
-            Dispatch.call(document, "Close", false);
+            // MUST use Variant args for Dispatch.call to map correctly to COM method
+            document = Dispatch.call(documents, "Open",
+                    new Variant(inputPath),
+                    new Variant(false), // ConfirmConversions
+                    new Variant(true)   // ReadOnly
+            ).toDispatch();
 
-            System.out.println("Conversion completed: " + output);
+            Dispatch.call(document, "SaveAs",
+                    new Variant(outputFile),
+                    new Variant(wdFormatPDF)
+            );
+
+            Dispatch.call(document, "Close", new Variant(false));
+
+            System.out.println("Conversion completed: " + outputFile);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            wordApp.invoke("Quit", 0);
+            try {
+                wordApp.invoke("Quit", new Variant[] { new Variant(0) });
+            } catch (Exception ex) {
+                System.err.println("Error quitting Word: " + ex.getMessage());
+            }
         }
     }
 }

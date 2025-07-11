@@ -37,9 +37,9 @@ javafx {
 test {
     useJUnitPlatform()
 }
-run {
-    jvmArgs = [
-            '--module-path', 'C:/javafx-sdk-21/lib',
-            '--add-modules', 'javafx.controls,javafx.fxml'
-    ]
-}
+//run {
+//    jvmArgs = [
+//            '--module-path', 'C:/javafx-sdk-21/lib',
+//            '--add-modules', 'javafx.controls,javafx.fxml'
+//    ]
+//}
