@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// ... [пакет и импорты как у вас выше]
+
 public class StartUI {
 
     public void launchUI(Stage stage) {
@@ -31,35 +33,27 @@ public class StartUI {
                 createTranslateTab()
         );
 
-        Scene scene = new Scene(tabPane, 600, 500);
+        Scene scene = new Scene(tabPane, 700, 500);
         stage.setScene(scene);
         stage.setTitle("Documents Helper");
         stage.show();
     }
 
-    //Задача 1 - Заполнение шаблона(Сделано)
-    /**
-     * Окно для работы с шаблоном, заполнения полей и подставление значений в файлы с сохранением
-     * @return
-     */
     private Tab createTemplateTab() {
         Tab tab = new Tab("Шаблон");
         tab.setClosable(false);
 
         TextField dateField = new TextField();
-        dateField.setPromptText("Введите дату");
-
         TextField invoiceField = new TextField();
-        invoiceField.setPromptText("Введите номер счёта");
-
         TextField hoursField = new TextField();
-        hoursField.setPromptText("Введите количество часов");
-
         TextField quantityField = new TextField();
-        quantityField.setPromptText("Введите количество услуг");
-
         TextField totalField = new TextField();
-        totalField.setPromptText("Введите итоговую сумму");
+
+        dateField.setPromptText("Дата");
+        invoiceField.setPromptText("Номер счёта");
+        hoursField.setPromptText("Часы");
+        quantityField.setPromptText("Количество услуг");
+        totalField.setPromptText("Итоговая сумма");
 
         Button saveBtn = new Button("Сохранить");
 
@@ -69,7 +63,6 @@ public class StartUI {
                     hoursField.getText().trim().isEmpty() ||
                     quantityField.getText().trim().isEmpty() ||
                     totalField.getText().trim().isEmpty()) {
-
                 showAlert(Alert.AlertType.WARNING, "Пожалуйста, заполните все поля");
                 return;
             }
@@ -86,21 +79,9 @@ public class StartUI {
                 WordTemplateProcessor.generateDocument("templates/template_en.docx", values, "output/output_en.docx");
 
                 WordToPdf wordToPdf = new WordToPdf();
-                String inputPathRu = new File("output/output_ru.docx").getAbsolutePath();
-                String outputPathRu = new File("output/output_ru.pdf").getAbsolutePath();
+                wordToPdf.convert(new File("output/output_ru.docx").getAbsolutePath(), new File("output/output_ru.pdf").getAbsolutePath());
+                wordToPdf.convert(new File("output/output_en.docx").getAbsolutePath(), new File("output/output_en.pdf").getAbsolutePath());
 
-
-                String inputPathEn = new File("output/output_en.docx").getAbsolutePath();
-                String outputPathEn = new File("output/output_en.pdf").getAbsolutePath();
-//                System.out.println(AbsolutePath);
-                wordToPdf.convert(
-                        inputPathRu,
-                        outputPathRu
-                );
-                wordToPdf.convert(
-                        inputPathEn,
-                        outputPathEn
-                );
                 showAlert(Alert.AlertType.INFORMATION, "Документы успешно созданы!");
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -108,32 +89,34 @@ public class StartUI {
             }
         });
 
-        VBox box = new VBox(10, dateField, invoiceField, hoursField, quantityField, totalField, saveBtn);
-        box.setPadding(new Insets(15));
-        tab.setContent(box);
+        GridPane form = new GridPane();
+        form.setVgap(10);
+        form.setHgap(10);
+        form.setPadding(new Insets(15));
+        form.addRow(0, new Label("Дата:"), dateField);
+        form.addRow(1, new Label("Номер счёта:"), invoiceField);
+        form.addRow(2, new Label("Часы:"), hoursField);
+        form.addRow(3, new Label("Количество услуг:"), quantityField);
+        form.addRow(4, new Label("Итоговая сумма:"), totalField);
+        form.add(saveBtn, 1, 5);
+
+        tab.setContent(form);
         return tab;
     }
 
-    //Задача 2 - Из Word в Pdf
-    /**
-     * Выбор файла docx для преобразования в pdf
-     * @return
-     */
     private Tab createPdfTab() {
         Tab tab = new Tab("Из Word в PDF");
         tab.setClosable(false);
 
-        Label fileLabel = new Label("Исходный файл:");
-        Button chooseFileBtn = new Button("Выбрать файл");
         TextField filePathField = new TextField();
         filePathField.setEditable(false);
+        filePathField.setPrefWidth(300);
 
+        Button chooseFileBtn = new Button("Выбрать файл");
         chooseFileBtn.setOnAction(ev -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Выберите файл");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Документы", "*.docx", "*.doc", "*.xlsx")
-            );
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Документы", "*.docx", "*.doc", "*.xlsx"));
             File selectedFile = fileChooser.showOpenDialog(null);
             if (selectedFile != null) {
                 filePathField.setText(selectedFile.getAbsolutePath());
@@ -144,7 +127,8 @@ public class StartUI {
         pdfNameField.setPromptText("Имя PDF-файла");
 
         TextField saveFolderField = new TextField();
-        saveFolderField.setPromptText("Папка для сохранения");
+        saveFolderField.setEditable(false);
+        saveFolderField.setPrefWidth(300);
 
         Button chooseFolderBtn = new Button("Выбрать папку");
         chooseFolderBtn.setOnAction(ev -> {
@@ -160,51 +144,41 @@ public class StartUI {
         convertBtn.setOnAction(ev -> {
             String filePath = filePathField.getText().trim();
             String saveFolder = saveFolderField.getText().trim();
-            String pdfName = pdfNameField.getText().trim();
+            String pdfName = pdfNameField.getText().trim().isEmpty() ? "converted" : pdfNameField.getText().trim();
 
             if (filePath.isEmpty() || saveFolder.isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Пожалуйста, выберите исходный файл и папку для сохранения.");
+                showAlert(Alert.AlertType.WARNING, "Пожалуйста, выберите файл и папку для сохранения.");
                 return;
             }
 
-            System.out.println("Конвертация в PDF...");
-            System.out.println("Исходный файл: " + filePath);
-            System.out.println("Папка сохранения: " + saveFolder);
-            System.out.println("Имя PDF: " + (pdfName.isEmpty() ? "по умолчанию" : pdfName));
+            WordToPdf wordToPdf = new WordToPdf();
+            wordToPdf.convert(filePath, saveFolder + File.separator + pdfName + ".pdf");
+
+            showAlert(Alert.AlertType.INFORMATION, "Файл успешно конвертирован!");
         });
 
-        VBox box = new VBox(10,
-                fileLabel, chooseFileBtn, filePathField,
-                pdfNameField,
-                chooseFolderBtn, saveFolderField,
-                convertBtn
-        );
-        box.setPadding(new Insets(15));
-        tab.setContent(box);
+        GridPane form = new GridPane();
+        form.setVgap(12);
+        form.setHgap(10);
+        form.setPadding(new Insets(20));
+        form.add(new Label("Исходный файл:"), 0, 0);
+        form.add(filePathField, 1, 0);
+        form.add(chooseFileBtn, 2, 0);
+
+        form.add(new Label("Папка для сохранения:"), 0, 1);
+        form.add(saveFolderField, 1, 1);
+        form.add(chooseFolderBtn, 2, 1);
+
+        form.add(new Label("Имя PDF-файла для сохранения:"), 0, 2);
+        form.add(pdfNameField, 1, 2);
+
+        form.add(convertBtn, 1, 3);
+        GridPane.setColumnSpan(convertBtn, 2);
+
+        tab.setContent(form);
         return tab;
     }
 
-    // Задача 3 - Из Excel в Pdf
-    /**
-     * Выбор нескольких excel файлов для преобразования в pdf
-     * @return
-     */
-    private Tab createTranslateTab() {
-        Tab tab = new Tab("Переводы");
-        tab.setClosable(false);
-
-        Label label = new Label("Функция будет добавлена позже.");
-        VBox box = new VBox(label);
-        box.setPadding(new Insets(20));
-        tab.setContent(box);
-        return tab;
-    }
-
-    // Задача 4 - Переводы(ничего нет)
-    /**
-     * Выбор файла excel для перевода содержимого
-     * @return
-     */
     private Tab createExcelTab() {
         Tab tab = new Tab("Загрузка Excel");
         tab.setClosable(false);
@@ -227,8 +201,19 @@ public class StartUI {
             }
         });
 
-        VBox box = new VBox(10, selectBtn, fileListBox);
-        box.setPadding(new Insets(15));
+        VBox box = new VBox(15, selectBtn, fileListBox);
+        box.setPadding(new Insets(20));
+        tab.setContent(box);
+        return tab;
+    }
+
+    private Tab createTranslateTab() {
+        Tab tab = new Tab("Переводы");
+        tab.setClosable(false);
+
+        Label label = new Label("Функция будет добавлена позже.");
+        VBox box = new VBox(label);
+        box.setPadding(new Insets(20));
         tab.setContent(box);
         return tab;
     }
@@ -238,5 +223,4 @@ public class StartUI {
         alert.setHeaderText(null);
         alert.showAndWait();
     }
-
 }
