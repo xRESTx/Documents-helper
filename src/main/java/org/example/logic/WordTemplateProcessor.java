@@ -3,10 +3,7 @@ package org.example.logic;
 import org.apache.poi.xwpf.usermodel.*;
 import org.example.convert.WordToPdf;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Map;
 
 public class WordTemplateProcessor {
@@ -21,8 +18,8 @@ public class WordTemplateProcessor {
      * @throws IOException если шаблон не найден или произошла ошибка записи
      */
     public static void generateDocument(String templateName, Map<String, String> values, String outputPath) throws IOException {
-        InputStream templateStream = WordTemplateProcessor.class.getClassLoader()
-                .getResourceAsStream("templates/" + templateName);
+        InputStream templateStream = new FileInputStream(templateName);
+
         if (templateStream == null) throw new FileNotFoundException("Шаблон не найден: " + templateName);
 
         XWPFDocument doc = new XWPFDocument(templateStream);

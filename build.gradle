@@ -2,7 +2,9 @@ plugins {
     id 'application'
     id 'java'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' // 👈 добавь этот плагин
 }
+
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
@@ -12,20 +14,17 @@ repositories {
 }
 
 dependencies {
-
     implementation 'org.openjfx:javafx-controls:21'
     implementation 'org.openjfx:javafx-fxml:21'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-
-    implementation 'org.apache.poi:poi-ooxml:5.2.3'
-    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
-    implementation("net.sf.jacob-project:jacob:1.14.3")
 }
 
 application {
-    mainClass = 'org.example.Main' // Путь классу, если отличается
+    mainClass = 'org.example.Main' // Убедись, что путь к классу правильный
 }
 
 javafx {
@@ -36,4 +35,44 @@ javafx {
 
 test {
     useJUnitPlatform()
+}
+
+import org.gradle.internal.os.OperatingSystem
+
+def isWindows = OperatingSystem.current().isWindows()
+
+def appName = "MyApp" // Укажи название своего приложения
+
+application {
+    mainClass = 'org.example.Main'
+}
+
+tasks.register('packageApp', Exec) {
+    dependsOn shadowJar
+
+    def outputDir = "$buildDir/dist"
+
+    doFirst {
+        mkdir outputDir
+    }
+    commandLine = [
+            "jpackage",
+            "--type", "app-image", // можно заменить на "installer" или "msi"
+            "--input", "build/libs",
+            "--dest", outputDir,
+            "--name", "DocumentsHelper",
+            "--main-jar", "documents-helper-all-1.0.jar",
+            "--main-class", "org.example.Main",
+            "--java-options", "--add-modules=javafx.controls,javafx.fxml",
+            "--java-options", "-Dfile.encoding=UTF-8",
+            "--verbose",
+            "--java-options", "--module-path=openjfx-24.0.1_windows-x64_bin-sdk/javafx-sdk-24.0.1/lib"
+    ]
+
+}
+shadowJar {
+    archiveBaseName.set('documents-helper-all')
+    archiveClassifier.set('')
+    archiveVersion.set('1.0')
+    mergeServiceFiles()
 }

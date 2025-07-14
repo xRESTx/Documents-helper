@@ -1,79 +1,59 @@
 package org.example.convert;
 
-import com.jacob.activeX.ActiveXComponent;
-import com.jacob.com.Dispatch;
-import com.jacob.com.Variant;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class WordToPdf {
-    public static final int wdFormatPDF = 17;
 
     public static void main(String[] args) {
-        String dllPath = new java.io.File("src/jacob-1.14.3-x64.dll").getAbsolutePath();
-        System.setProperty("jacob.dll.path", dllPath);
-        com.jacob.com.LibraryLoader.loadJacobLibrary();
+        WordToPdf converter = new WordToPdf();
 
-        WordToPdf wordToPdf = new WordToPdf();
-        wordToPdf.convert(
-                "C:\\Users\\REST\\Downloads\\Оценка_качества_бинарной_классификации.docx",
-                "C:\\Users\\REST\\Downloads\\",
-                "converted.pdf"
-        );
+        String inputPath = "C:\\Users\\REST\\Downloads\\Оценка_качества_бинарной_классификации.docx";
+        String outputPath = "C:\\Users\\REST\\Downloads\\converted.pdf";
+
+        converter.convert(inputPath, outputPath);
     }
 
-//    public void convert(String inputPath, String outputPath, String filename) {
-//        ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
-//        try {
-//            wordApp.setProperty("Visible", new Variant(false));
-//            Dispatch documents = wordApp.getProperty("Documents").toDispatch();
-//
-//            String input = inputPath; //"C:\\path\\to\\your\\file.doc"
-//            String output = outputPath + filename; //"C:\\path\\to\\your\\file.pdf";
-//
-//            Dispatch document = Dispatch.call(documents, "Open", input, false, true).toDispatch();
-//            Dispatch.call(document, "SaveAs", output, wdFormatPDF);
-//            Dispatch.call(document, "Close", false);
-//
-//            System.out.println("Conversion completed: " + output);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            wordApp.invoke("Quit", 0);
-//        }
-//    }
-
-    public void convert(String inputPath, String outputPath, String filename) {
-        ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
-        Dispatch document = null;
-
+    public void convert(String inputFile, String outputFile) {
         try {
-            wordApp.setProperty("Visible", new Variant(false));
-            Dispatch documents = wordApp.getProperty("Documents").toDispatch();
+            // Формируем PowerShell скрипт как строку
+            String psScript =
+                    "$word = New-Object -ComObject Word.Application; " +
+                            "$word.Visible = $false; " +
+                            "$doc = $word.Documents.Open('" + inputFile.replace("\\", "\\\\") + "'); " +
+                            "$pdfPath = '" + outputFile.replace("\\", "\\\\") + "'; " +
+                            // Сохраняем как PDF (wdFormatPDF = 17)
+                            "$doc.SaveAs([ref] $pdfPath, [ref] 17); " +
+                            "$doc.Close(); " +
+                            "$word.Quit();";
 
-            String outputFile = outputPath + filename;
+            // Команда запуска powershell
+            String command = "powershell.exe -NoProfile -Command " + psScript;
 
-            // MUST use Variant args for Dispatch.call to map correctly to COM method
-            document = Dispatch.call(documents, "Open",
-                    new Variant(inputPath),
-                    new Variant(false), // ConfirmConversions
-                    new Variant(true)   // ReadOnly
-            ).toDispatch();
+            // Запуск процесса
+            Process powerShellProcess = Runtime.getRuntime().exec(command);
 
-            Dispatch.call(document, "SaveAs",
-                    new Variant(outputFile),
-                    new Variant(wdFormatPDF)
-            );
+            // Считываем вывод скрипта (для отладки)
+            try (BufferedReader stdInput = new BufferedReader(new InputStreamReader(powerShellProcess.getInputStream()));
+                 BufferedReader stdError = new BufferedReader(new InputStreamReader(powerShellProcess.getErrorStream()))) {
 
-            Dispatch.call(document, "Close", new Variant(false));
+                String s;
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+                while ((s = stdError.readLine()) != null) {
+                    System.err.println(s);
+                }
+            }
 
-            System.out.println("Conversion completed: " + outputFile);
+            int exitCode = powerShellProcess.waitFor();
+            if (exitCode == 0) {
+                System.out.println("Conversion completed: " + outputFile);
+            } else {
+                System.err.println("PowerShell script exited with code " + exitCode);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                wordApp.invoke("Quit", new Variant[] { new Variant(0) });
-            } catch (Exception ex) {
-                System.err.println("Error quitting Word: " + ex.getMessage());
-            }
         }
     }
 }

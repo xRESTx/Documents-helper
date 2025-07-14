@@ -82,21 +82,25 @@ public class StartUI {
             values.put("total", totalField.getText());
 
             try {
-                WordTemplateProcessor.generateDocument("template_ru.docx", values, "src/main/resources/output/output_ru.docx");
-                WordTemplateProcessor.generateDocument("template_en.docx", values, "src/main/resources/output/output_en.docx");
+                WordTemplateProcessor.generateDocument("templates/template_ru.docx", values, "output/output_ru.docx");
+                WordTemplateProcessor.generateDocument("templates/template_en.docx", values, "output/output_en.docx");
 
                 WordToPdf wordToPdf = new WordToPdf();
-                String AbsolutePath = new java.io.File("src/main/resources/output").getAbsolutePath();
+                String inputPathRu = new File("output/output_ru.docx").getAbsolutePath();
+                String outputPathRu = new File("output/output_ru.pdf").getAbsolutePath();
+
+
+                String inputPathEn = new File("output/output_en.docx").getAbsolutePath();
+                String outputPathEn = new File("output/output_en.pdf").getAbsolutePath();
 //                System.out.println(AbsolutePath);
                 wordToPdf.convert(
-                        AbsolutePath + "/output_ru.docx",
-                        AbsolutePath,  "/output_ru.pdf"
+                        inputPathRu,
+                        outputPathRu
                 );
                 wordToPdf.convert(
-                        AbsolutePath + "/output_en.docx",
-                        AbsolutePath,  "/output_en.pdf"
+                        inputPathEn,
+                        outputPathEn
                 );
-
                 showAlert(Alert.AlertType.INFORMATION, "Документы успешно созданы!");
             } catch (IOException ex) {
                 ex.printStackTrace();
