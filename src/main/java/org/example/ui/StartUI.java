@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import org.example.convert.WordToPdf;
 import org.example.logic.WordTemplateProcessor;
+import org.example.translation.ExcelTranslator;
 
 import java.io.File;
 import java.io.IOException;
@@ -211,12 +212,38 @@ public class StartUI {
         Tab tab = new Tab("Переводы");
         tab.setClosable(false);
 
-        Label label = new Label("Функция будет добавлена позже.");
-        VBox box = new VBox(label);
+        Label fileLabel = new Label("Файл не выбран");
+        Button chooseFileBtn = new Button("Выбрать Excel-файл");
+        Button translateBtn = new Button("Перевести");
+
+        File[] selectedFile = new File[1]; // Храним выбранный файл
+
+        chooseFileBtn.setOnAction(e -> {
+            FileChooser chooser = new FileChooser();
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xls", "*.xlsx"));
+            File file = chooser.showOpenDialog(tab.getTabPane().getScene().getWindow());
+            if (file != null) {
+                selectedFile[0] = file;
+                fileLabel.setText("Выбран: " + file.getName());
+            }
+        });
+
+        translateBtn.setOnAction(e -> {
+            if (selectedFile[0] != null) {
+                new ExcelTranslator().translateExcel(selectedFile[0]);
+                showAlert(Alert.AlertType.INFORMATION, "Файл успешно переведён:\n" + selectedFile[0].getName().replace(".xlsx", "_translated.xlsx"));
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Сначала выберите файл");
+            }
+        });
+
+
+        VBox box = new VBox(15, chooseFileBtn, fileLabel, translateBtn);
         box.setPadding(new Insets(20));
         tab.setContent(box);
         return tab;
     }
+
 
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type, message);
