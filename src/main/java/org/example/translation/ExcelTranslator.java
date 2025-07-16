@@ -19,38 +19,44 @@ public class ExcelTranslator {
             return;
         }
 
+        boolean isXls = inputFile.getName().endsWith(".xls");
+
         try (FileInputStream fis = new FileInputStream(inputFile);
-             Workbook inputBook = inputFile.getName().endsWith(".xls")
-                     ? new HSSFWorkbook(fis)
-                     : new XSSFWorkbook(fis);
-             XSSFWorkbook outputBook = new XSSFWorkbook()) {
+             Workbook workbook = isXls ? new HSSFWorkbook(fis) : new XSSFWorkbook(fis)) {
 
-            for (int i = 0; i < inputBook.getNumberOfSheets(); i++) {
-                Sheet inputSheet = inputBook.getSheetAt(i);
-                Sheet outputSheet = outputBook.createSheet(inputSheet.getSheetName());
+            // Проход по всем листам
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+                Sheet sheet = workbook.getSheetAt(i);
 
-                for (Row row : inputSheet) {
-                    Row newRow = outputSheet.createRow(row.getRowNum());
+                sheet.setAutobreaks(true);
+                sheet.setFitToPage(true);
+
+                PrintSetup printSetup = sheet.getPrintSetup();
+                printSetup.setFitWidth((short) 1);   // Все столбцы — на одной странице
+                printSetup.setFitHeight((short) 0);  // Высота — автоматическая (много страниц)
+
+
+                for (Row row : sheet) {
                     for (Cell cell : row) {
-                        Cell newCell = newRow.createCell(cell.getColumnIndex());
-
                         if (cell.getCellType() == CellType.STRING) {
-                            String original = cell.getStringCellValue();
-                            String translated = translateWithMyMemory(original);
-                            newCell.setCellValue(translated);
-                        } else {
-                            newCell.setCellValue(cell.toString());
+                            String originalText = cell.getStringCellValue();
+                            String translatedText = translateWithMyMemory(originalText);
+
+                            cell.setCellValue(translatedText); //  Перезаписываем значение
                         }
+                        // Стили и формат остаются, так как это оригинальный файл
                     }
                 }
             }
 
-            String outputPath = inputFile.getParent() + File.separator +
-                    inputFile.getName().replaceAll("\\.(xls|xlsx)$", "_translated.xlsx");
+            // Сохраняем новый файл с _translated суффиксом
+            String extension = isXls ? ".xls" : ".xlsx";
+            String baseName = inputFile.getName().replaceAll("\\.(xls|xlsx)$", "");
+            String outputPath = inputFile.getParent() + File.separator + baseName + "_translated" + extension;
 
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
-                outputBook.write(fos);
-                System.out.println("Готово: " + outputPath);
+                workbook.write(fos);
+                System.out.println("Переведённый файл сохранён: " + outputPath);
             }
 
         } catch (Exception e) {
@@ -66,8 +72,7 @@ public class ExcelTranslator {
             String encodedText = URLEncoder.encode(originalText, "UTF-8");
             String urlStr = "https://api.mymemory.translated.net/get?q=" + encodedText + "&langpair=hy|ru";
 
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL(urlStr).openConnection();
             conn.setRequestMethod("GET");
 
             try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
