@@ -78,12 +78,13 @@ public class StartUI {
             values.put("total", totalField.getText());
 
             try {
-                WordTemplateProcessor.generateDocument("templates/template_ru.docx", values, "output/output_ru.docx");
-                WordTemplateProcessor.generateDocument("templates/template_en.docx", values, "output/output_en.docx");
+                WordTemplateProcessor processor = new WordTemplateProcessor();
+                processor.generateDocument("src/main/resources/templates/template_ru.docx", values, "src/main/resources/output/output_ru.docx");
+                processor.generateDocument("src/main/resources/templates/template_en.docx", values, "src/main/resources/output/output_en.docx");
 
                 WordToPdf wordToPdf = new WordToPdf();
-                wordToPdf.convert(new File("output/output_ru.docx").getAbsolutePath(), new File("output/output_ru.pdf").getAbsolutePath());
-                wordToPdf.convert(new File("output/output_en.docx").getAbsolutePath(), new File("output/output_en.pdf").getAbsolutePath());
+                wordToPdf.convert(new File("src/main/resources/output/output_ru.docx").getAbsolutePath(), new File("src/main/resources/output/output_ru.pdf").getAbsolutePath());
+                wordToPdf.convert(new File("src/main/resources/output/output_en.docx").getAbsolutePath(), new File("src/main/resources/output/output_en.pdf").getAbsolutePath());
 
                 showAlert(Alert.AlertType.INFORMATION, "Документы успешно созданы!");
             } catch (IOException ex) {

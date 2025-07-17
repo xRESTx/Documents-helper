@@ -121,17 +121,12 @@ public class ExcelTranslator {
 
                 String result = response.toString();
 
-                // Отладочный вывод
-                //System.out.println("Original: " + originalText);
-                //System.out.println("API Response: " + result);
-
                 int start = result.indexOf("\"translatedText\":\"") + 18;
                 int end = result.indexOf("\"", start);
                 String rawTranslated = result.substring(start, end);
 
                 // Декодируем Unicode
                 String decoded = StringEscapeUtils.unescapeJava(rawTranslated);
-                //System.out.println("Translated: " + decoded);
 
                 return decoded;
             }

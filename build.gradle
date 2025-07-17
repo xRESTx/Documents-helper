@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'java'
     id 'org.openjfx.javafxplugin' version '0.1.0'
-    id 'com.github.johnrengelman.shadow' version '8.1.1' // 👈 добавь этот плагин
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 
@@ -43,7 +43,7 @@ import org.gradle.internal.os.OperatingSystem
 
 def isWindows = OperatingSystem.current().isWindows()
 
-def appName = "MyApp" // Укажи название своего приложения
+def appName = "Document Helper"
 
 application {
     mainClass = 'org.example.Main'
@@ -59,7 +59,7 @@ tasks.register('packageApp', Exec) {
     }
     commandLine = [
             "jpackage",
-            "--type", "app-image", // можно заменить на "installer" или "msi"
+            "--type", "app-image",
             "--input", "build/libs",
             "--dest", outputDir,
             "--name", "DocumentsHelper",

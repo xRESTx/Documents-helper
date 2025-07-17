@@ -17,7 +17,7 @@ public class WordTemplateProcessor {
      * @param outputPath путь, по которому будет сохранён сгенерированный документ
      * @throws IOException если шаблон не найден или произошла ошибка записи
      */
-    public static void generateDocument(String templateName, Map<String, String> values, String outputPath) throws IOException {
+    public void generateDocument(String templateName, Map<String, String> values, String outputPath) throws IOException {
         InputStream templateStream = new FileInputStream(templateName);
 
         if (templateStream == null) throw new FileNotFoundException("Шаблон не найден: " + templateName);
@@ -42,7 +42,6 @@ public class WordTemplateProcessor {
 
         try (FileOutputStream out = new FileOutputStream(outputPath)) {
             doc.write(out);
-            /*System.out.println("Документ сохранён: " + outputPath);*/
         }
         doc.close();
     }
@@ -55,7 +54,7 @@ public class WordTemplateProcessor {
      * @param values      коллекция плейсхолдеров и их значений
      * @param fromTable   флаг, указывающий, находится ли абзац внутри таблицы (для отладки)
      */
-    private static void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> values, boolean fromTable) {
+    private void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> values, boolean fromTable) {
         String fullText = paragraph.getText();
         if (fullText == null || fullText.isEmpty()) return;
 
@@ -65,11 +64,6 @@ public class WordTemplateProcessor {
             if (fullText.contains(placeholder)) {
                 fullText = fullText.replace(placeholder, entry.getValue());
                 hasPlaceholder = true;
-                /*if (fromTable) {
-                    System.out.println("[Таблица] Найден плейсхолдер: " + placeholder + " → " + entry.getValue());
-                } else {
-                    System.out.println("Абзац → заменено: " + placeholder + " → " + entry.getValue());
-                }*/
             }
         }
 

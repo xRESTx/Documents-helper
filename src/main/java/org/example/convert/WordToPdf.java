@@ -5,15 +5,6 @@ import java.io.InputStreamReader;
 
 public class WordToPdf {
 
-    public static void main(String[] args) {
-        WordToPdf converter = new WordToPdf();
-
-        String inputPath = "C:\\Users\\REST\\Downloads\\Оценка_качества_бинарной_классификации.docx";
-        String outputPath = "C:\\Users\\REST\\Downloads\\converted.pdf";
-
-        converter.convert(inputPath, outputPath);
-    }
-
     public void convert(String inputFile, String outputFile) {
         try {
             // Формируем PowerShell скрипт как строку
