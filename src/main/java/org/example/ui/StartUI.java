@@ -1,5 +1,7 @@
 package org.example.ui;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -212,37 +214,114 @@ public class StartUI {
         Tab tab = new Tab("Переводы");
         tab.setClosable(false);
 
-        Label fileLabel = new Label("Файл не выбран");
+        TextField filePathField = new TextField();
+        filePathField.setEditable(false);
+        filePathField.setPrefWidth(300);
+
         Button chooseFileBtn = new Button("Выбрать Excel-файл");
-        Button translateBtn = new Button("Перевести");
-
-        File[] selectedFile = new File[1]; // Храним выбранный файл
-
         chooseFileBtn.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
-            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xls", "*.xlsx"));
-            File file = chooser.showOpenDialog(tab.getTabPane().getScene().getWindow());
-            if (file != null) {
-                selectedFile[0] = file;
-                fileLabel.setText("Выбран: " + file.getName());
+            chooser.setTitle("Выберите Excel-файл");
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel", "*.xls", "*.xlsx"));
+            File selectedFile = chooser.showOpenDialog(null);
+            if (selectedFile != null) {
+                filePathField.setText(selectedFile.getAbsolutePath());
             }
         });
+
+        TextField translatedNameField = new TextField();
+        translatedNameField.setPromptText("Имя переведённого файла");
+
+        TextField saveFolderField = new TextField();
+        saveFolderField.setEditable(false);
+        saveFolderField.setPrefWidth(300);
+
+        Button chooseFolderBtn = new Button("Выбрать папку");
+        chooseFolderBtn.setOnAction(ev -> {
+            DirectoryChooser dirChooser = new DirectoryChooser();
+            dirChooser.setTitle("Выберите папку");
+            File folder = dirChooser.showDialog(null);
+            if (folder != null) {
+                saveFolderField.setText(folder.getAbsolutePath());
+            }
+        });
+
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.setPrefWidth(300);
+
+        Button translateBtn = new Button("Перевести");
 
         translateBtn.setOnAction(e -> {
-            if (selectedFile[0] != null) {
-                new ExcelTranslator().translateExcel(selectedFile[0]);
-                showAlert(Alert.AlertType.INFORMATION, "Файл успешно переведён:\n" + selectedFile[0].getName().replace(".xlsx", "_translated.xlsx"));
-            } else {
-                showAlert(Alert.AlertType.WARNING, "Сначала выберите файл");
+            String filePath = filePathField.getText().trim();
+            String folderPath = saveFolderField.getText().trim();
+            String outputName = translatedNameField.getText().trim();
+
+            File inputFile = new File(filePath);
+
+            // Если папка не указана — используем папку исходного файла
+            if (folderPath.isEmpty()) {
+                folderPath = inputFile.getParent();
             }
+
+            // Если имя файла пустое — используем имя исходного + _translated
+            if (outputName.isEmpty()) {
+                String baseName = inputFile.getName().replaceAll("\\.(xls|xlsx)$", "");
+                outputName = baseName + "_translated";
+            }
+
+            File outputFile = new File(folderPath + File.separator + outputName + getExtension(inputFile));
+
+            Task<Void> translationTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    ExcelTranslator translator = new ExcelTranslator();
+                    translator.translateExcel(inputFile, outputFile, (double v) -> updateProgress(v, 1.0));
+
+                    Platform.runLater(() ->
+                            showAlert(Alert.AlertType.INFORMATION, "Файл успешно переведён:\n" + outputFile.getName()));
+                    return null;
+                }
+            };
+
+            progressBar.progressProperty().bind(translationTask.progressProperty());
+            new Thread(translationTask).start();
         });
 
 
-        VBox box = new VBox(15, chooseFileBtn, fileLabel, translateBtn);
-        box.setPadding(new Insets(20));
-        tab.setContent(box);
+        GridPane form = new GridPane();
+        form.setVgap(12);
+        form.setHgap(10);
+        form.setPadding(new Insets(20));
+
+        form.add(new Label("Исходный Excel-файл:"), 0, 0);
+        form.add(filePathField, 1, 0);
+        form.add(chooseFileBtn, 2, 0);
+
+        form.add(new Label("Папка для сохранения:"), 0, 1);
+        form.add(saveFolderField, 1, 1);
+        form.add(chooseFolderBtn, 2, 1);
+
+        form.add(new Label("Имя переведённого файла:"), 0, 2);
+        form.add(translatedNameField, 1, 2);
+
+        form.add(translateBtn, 1, 3);
+        GridPane.setColumnSpan(translateBtn, 2);
+
+        form.add(progressBar, 1, 4);
+        GridPane.setColumnSpan(progressBar, 2);
+
+        tab.setContent(form);
         return tab;
     }
+
+
+    private String getExtension(File file) {
+        if (file.getName().endsWith(".xls")) return ".xls";
+        if (file.getName().endsWith(".xlsx")) return ".xlsx";
+        return ".xlsx"; // безопасный дефолт
+    }
+
+
 
 
     private void showAlert(Alert.AlertType type, String message) {
