@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="The translation mechanism has been redesigned, the file is now copied and the contents are edited, and an Apache POI page break has been added to Excel">
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Minor inaccuracies have been eliminated, d=folders added to gitignore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/translation/ExcelTranslator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/translation/ExcelTranslator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ui/StartUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ui/StartUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +56,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
     &quot;Gradle.documents-helper [run].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -114,7 +113,23 @@
       <option name="project" value="LOCAL" />
       <updated>1752670829222</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="The UI of the translation section and its logic have been completed, java doc and visualization of translation progress have been added.">
+      <option name="closed" value="true" />
+      <created>1752750879305</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1752750879306</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Minor inaccuracies have been eliminated, d=folders added to gitignore">
+      <option name="closed" value="true" />
+      <created>1752755537388</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1752755537388</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,6 +146,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="A minimal interface for the translation section has been created, as well as the logic for translating excel files via the MyMemory Translation API." />
     <MESSAGE value="The translation mechanism has been redesigned, the file is now copied and the contents are edited, and an Apache POI page break has been added to Excel" />
-    <option name="LAST_COMMIT_MESSAGE" value="The translation mechanism has been redesigned, the file is now copied and the contents are edited, and an Apache POI page break has been added to Excel" />
+    <MESSAGE value="The UI of the translation section and its logic have been completed, java doc and visualization of translation progress have been added." />
+    <MESSAGE value="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
   </component>
 </project>

@@ -115,6 +115,7 @@ public class StartUI {
         TextField filePathField = new TextField();
         filePathField.setEditable(false);
         filePathField.setPrefWidth(300);
+        filePathField.setPromptText("Путь к выбранному файлу (.docx, .doc, .xlsx)");
 
         Button chooseFileBtn = new Button("Выбрать файл");
         chooseFileBtn.setOnAction(ev -> {
@@ -133,6 +134,7 @@ public class StartUI {
         TextField saveFolderField = new TextField();
         saveFolderField.setEditable(false);
         saveFolderField.setPrefWidth(300);
+        saveFolderField.setPromptText("Папка, куда сохранить PDF");
 
         Button chooseFolderBtn = new Button("Выбрать папку");
         chooseFolderBtn.setOnAction(ev -> {
@@ -184,7 +186,7 @@ public class StartUI {
     }
 
     private Tab createExcelTab() {
-        Tab tab = new Tab("Загрузка Excel");
+        Tab tab = new Tab("Из Excel в PDF");
         tab.setClosable(false);
 
         VBox fileListBox = new VBox(10);
@@ -218,6 +220,7 @@ public class StartUI {
         TextField filePathField = new TextField();
         filePathField.setEditable(false);
         filePathField.setPrefWidth(300);
+        filePathField.setPromptText("Путь к выбранному Excel-файлу");
 
         Button chooseFileBtn = new Button("Выбрать Excel-файл");
         chooseFileBtn.setOnAction(e -> {
@@ -236,6 +239,7 @@ public class StartUI {
         TextField saveFolderField = new TextField();
         saveFolderField.setEditable(false);
         saveFolderField.setPrefWidth(300);
+        saveFolderField.setPromptText("Папка, куда сохранить переведённый файл");
 
         Button chooseFolderBtn = new Button("Выбрать папку");
         chooseFolderBtn.setOnAction(ev -> {
