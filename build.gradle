@@ -20,13 +20,12 @@ dependencies {
     implementation 'org.apache.pdfbox:pdfbox:2.0.29'
     implementation 'org.apache.commons:commons-text:1.10.0'
 
-
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 application {
-    mainClass = 'org.example.Main' // Убедись, что путь к классу правильный
+    mainClass = 'org.example.Main'
 }
 
 javafx {

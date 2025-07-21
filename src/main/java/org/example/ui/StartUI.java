@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javafx.geometry.Insets;
+import org.example.convert.ExcelToPdf;
 import org.example.convert.WordToPdf;
 import org.example.logic.WordTemplateProcessor;
 import org.example.translation.ExcelTranslator;
@@ -189,27 +190,130 @@ public class StartUI {
         Tab tab = new Tab("Из Excel в PDF");
         tab.setClosable(false);
 
-        VBox fileListBox = new VBox(10);
-        Button selectBtn = new Button("Выбрать Excel файлы");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
 
+        /* список файлов с кастомной ячейкой */
+        ListView<File> fileList = new ListView<>();
+        fileList.setPrefHeight(250);
+
+        /* прогресс-бар и лог */
+        ProgressBar progressBar = new ProgressBar(0);
+        ListView<String> logList = new ListView<>();
+
+        /* кнопки */
+        Button selectBtn   = new Button("Выбрать Excel файлы");
+        Button convertBtn  = new Button("Конвертировать");
+        Button clearBtn    = new Button("Очистить всё");
+        convertBtn.setDisable(true);
+
+        /* выбор файлов */
         selectBtn.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Выберите Excel файлы");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls"));
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+            FileChooser fc = new FileChooser();
+            fc.setTitle("Выберите Excel файлы");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls"));
+            fc.setInitialDirectory(new File(System.getProperty("user.home")));
 
-            List<File> files = fileChooser.showOpenMultipleDialog(null);
-            fileListBox.getChildren().clear();
+            List<File> files = fc.showOpenMultipleDialog(null);
             if (files != null) {
-                for (File file : files) {
-                    fileListBox.getChildren().add(new Label(file.getName()));
+                fileList.getItems().addAll(files);
+                convertBtn.setDisable(fileList.getItems().isEmpty());
+            }
+        });
+
+        /* очистка всего списка */
+        clearBtn.setOnAction(e -> {
+            fileList.getItems().clear();
+            convertBtn.setDisable(true);
+            progressBar.progressProperty().unbind();
+            progressBar.setProgress(0);
+            logList.getItems().clear();
+        });
+
+        /* удаление одного файла (×) */
+        fileList.setCellFactory(lv -> new ListCell<>() {
+            private final Button removeBtn = new Button("×");
+            private final HBox hBox = new HBox(10, removeBtn);
+
+            {
+                removeBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: red; -fx-font-weight: bold;");
+                removeBtn.setOnAction(e -> {
+                    File item = getItem();
+                    if (item != null) {
+                        fileList.getItems().remove(item);
+                        convertBtn.setDisable(fileList.getItems().isEmpty());
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(File item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                    setGraphic(hBox);
                 }
             }
         });
 
-        VBox box = new VBox(15, selectBtn, fileListBox);
-        box.setPadding(new Insets(20));
-        tab.setContent(box);
+        /* конвертация */
+        convertBtn.setOnAction(e -> {
+            List<File> files = fileList.getItems();
+            if (files.isEmpty()) return;
+
+            progressBar.progressProperty().unbind();
+            progressBar.setProgress(0);
+            logList.getItems().clear();
+            convertBtn.setDisable(true);
+            clearBtn.setDisable(true);
+
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    int total = files.size();
+                    int done = 0;
+                    for (File src : files) {
+                        String baseName = src.getName().replaceFirst("\\.[^.]+$", "");
+                        File out = new File(src.getParentFile(), baseName + ".pdf");
+
+                        updateMessage("Конвертирую: " + src.getName());
+                        ExcelToPdf.convert(src.getAbsolutePath(), out.getAbsolutePath());
+
+                        Platform.runLater(() -> logList.getItems().add("✓ " + out.getName()));
+                        updateProgress(++done, total);
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void succeeded() {
+                    convertBtn.setDisable(false);
+                    clearBtn.setDisable(false);
+                }
+
+                @Override
+                protected void failed() {
+                    convertBtn.setDisable(false);
+                    clearBtn.setDisable(false);
+                    showAlert(Alert.AlertType.ERROR, "Ошибка конвертации:\n" + getException().getMessage());
+                }
+            };
+
+            progressBar.progressProperty().bind(task.progressProperty());
+            new Thread(task).start();
+        });
+
+        /* компоновка */
+        HBox buttonBar = new HBox(10, selectBtn, convertBtn, clearBtn);
+        root.getChildren().addAll(buttonBar,
+                new Label("Выбранные файлы:"),
+                fileList,
+                progressBar,
+                logList);
+        tab.setContent(root);
         return tab;
     }
 
