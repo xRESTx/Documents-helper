@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Hints have been added and the third section has been renamed" />
+    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Minor inaccuracies have been eliminated, d=folders added to gitignore">
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/convert/ExcelToPdf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/convert/ExcelToPdf.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +20,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -40,6 +45,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="excel-translation" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -54,10 +64,12 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;Gradle.documents-helper [:ExcelToPdfConverter.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.documents-helper [:org.example.convert.ExcelToPdf.main()].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.documents-helper [run].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;excel-translation&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;excelToPdf&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
 }</component>
@@ -126,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752755537388</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add java doc">
+      <option name="closed" value="true" />
+      <created>1753350544117</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1753350544117</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -145,6 +165,7 @@
     <MESSAGE value="The translation mechanism has been redesigned, the file is now copied and the contents are edited, and an Apache POI page break has been added to Excel" />
     <MESSAGE value="The UI of the translation section and its logic have been completed, java doc and visualization of translation progress have been added." />
     <MESSAGE value="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
+    <MESSAGE value="add java doc" />
+    <option name="LAST_COMMIT_MESSAGE" value="add java doc" />
   </component>
 </project>
