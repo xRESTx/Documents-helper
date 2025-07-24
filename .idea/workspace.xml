@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Minor inaccuracies have been eliminated, d=folders added to gitignore">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ui/StartUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ui/StartUI.java" afterDir="false" />
-    </list>
+    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Hints have been added and the third section has been renamed" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
