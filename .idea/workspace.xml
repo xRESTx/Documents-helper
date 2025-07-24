@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
+    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Changing the name of the section, adding an image" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,7 +144,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753350544117</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Changing the name of the section, adding an image">
+      <option name="closed" value="true" />
+      <created>1753362553262</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1753362553262</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,6 +172,7 @@
     <MESSAGE value="The UI of the translation section and its logic have been completed, java doc and visualization of translation progress have been added." />
     <MESSAGE value="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
     <MESSAGE value="add java doc" />
-    <option name="LAST_COMMIT_MESSAGE" value="add java doc" />
+    <MESSAGE value="Changing the name of the section, adding an image" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changing the name of the section, adding an image" />
   </component>
 </project>
