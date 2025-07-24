@@ -4,8 +4,22 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
+
+/**
+ * Класс ExcelToPdf обеспечивает конвертацию Excel-файла (.xls, .xlsx)
+ * в PDF-файл с использованием PowerShell и COM-объекта Excel.
+ */
 public class ExcelToPdf {
 
+    /**
+     * Конвертирует Excel-файл в PDF-файл с сохранением форматирования и автоподгонкой по размеру.
+     * Генерирует временный PowerShell-скрипт и запускает его для экспорта через Excel COM.
+     *
+     * @param excelPath путь к исходному Excel-файлу (.xls или .xlsx)
+     * @param pdfPath   путь, по которому сохранить PDF-файл. Если null или пустой — генерируется из имени Excel.
+     * @throws IOException          при ошибке записи или выполнения PowerShell
+     * @throws InterruptedException если процесс PowerShell был прерван
+     */
     public static void convert(String excelPath, String pdfPath)
             throws IOException, InterruptedException {
 
@@ -63,11 +77,22 @@ public class ExcelToPdf {
             throw new IOException("PowerShell вернул код " + exit);
         }
     }
-
+    /**
+     * Экранирует символы апострофа для безопасного использования в PowerShell-строках.
+     * @param s исходная строка
+     * @return строка с экранированными апострофами для PowerShell
+     */
     private static String escape(String s) {
         return s.replace("'", "''");
     }
 
+    /**
+     * Транслитерирует кириллические символы в латиницу для создания корректных имён файлов.
+     * Заменяет все небезопасные символы на "_".
+     *
+     * @param src исходная строка (обычно имя файла)
+     * @return транслитерированная и безопасная для файловой системы строка
+     */
     private static String transliterate(String src) {
         String[] rus = {"а","б","в","г","д","е","ё","ж","з","и","й","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я",
                 "А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М","Н","О","П","Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я"};
