@@ -54,6 +54,7 @@ public class StartUI {
         TextField hoursField = new TextField();
         TextField quantityField = new TextField();
         TextField totalField = new TextField();
+        System.out.println("Debug: launched from add-ui branch");
 
         dateField.setPromptText("Дата");
         invoiceField.setPromptText("Номер счёта");
@@ -92,7 +93,7 @@ public class StartUI {
                 showAlert(Alert.AlertType.INFORMATION, "Документы успешно созданы!");
             } catch (IOException ex) {
                 ex.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Ошибка при создании документов");
+                showAlert(Alert.AlertType.ERROR, "Ошибка при создании документов!");
             }
         });
 
@@ -100,11 +101,11 @@ public class StartUI {
         form.setVgap(10);
         form.setHgap(10);
         form.setPadding(new Insets(15));
-        form.addRow(0, new Label("Дата:"), dateField);
-        form.addRow(1, new Label("Номер счёта:"), invoiceField);
+        form.addRow(0, new Label("Дата: "), dateField);
+        form.addRow(1, new Label("Номер счёта: "), invoiceField);
         form.addRow(2, new Label("Часы:"), hoursField);
-        form.addRow(3, new Label("Количество услуг:"), quantityField);
-        form.addRow(4, new Label("Итоговая сумма:"), totalField);
+        form.addRow(3, new Label("Количество услуг :"), quantityField);
+        form.addRow(4, new Label("Итоговая сумма: "), totalField);
         form.add(saveBtn, 1, 5);
 
         Image image = new Image("file:src/main/resources/images/img.png");
