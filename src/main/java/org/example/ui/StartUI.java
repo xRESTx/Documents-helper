@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -37,14 +39,14 @@ public class StartUI {
                 createTranslateTab()
         );
 
-        Scene scene = new Scene(tabPane, 700, 500);
+        Scene scene = new Scene(tabPane, 700, 600);
         stage.setScene(scene);
         stage.setTitle("Documents Helper");
         stage.show();
     }
 
     private Tab createTemplateTab() {
-        Tab tab = new Tab("Шаблон");
+        Tab tab = new Tab("Сформировать счет");
         tab.setClosable(false);
 
         TextField dateField = new TextField();
@@ -105,7 +107,17 @@ public class StartUI {
         form.addRow(4, new Label("Итоговая сумма:"), totalField);
         form.add(saveBtn, 1, 5);
 
-        tab.setContent(form);
+        Image image = new Image("file:src/main/resources/images/img.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(350);      // ширина изображения
+        imageView.setPreserveRatio(true); // сохраняем пропорции
+
+        HBox content = new HBox(30); // отступ между формой и изображением
+        content.setPadding(new Insets(15));
+        content.getChildren().addAll(form, imageView);
+
+
+        tab.setContent(content);
         return tab;
     }
 

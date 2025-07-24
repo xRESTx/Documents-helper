@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Minor inaccuracies have been eliminated, d=folders added to gitignore">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/convert/ExcelToPdf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/convert/ExcelToPdf.java" afterDir="false" />
-    </list>
+    <list default="true" id="7ab12cc2-b55d-49cf-8335-d69a3720fbf6" name="Changes" comment="Minor inaccuracies have been eliminated, d=folders added to gitignore" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,7 +67,7 @@
     &quot;Gradle.documents-helper [run].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;excelToPdf&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
 }</component>
